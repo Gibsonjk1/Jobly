@@ -1,0 +1,8 @@
+.navbar {
+    box-shadow: 0px 2px lightgrey;
+    background-color: whitesmoke;
+}
+
+.navitem{
+    padding: 5px;
+}
