@@ -8,15 +8,16 @@ import {
   } from "reactstrap";
   import SearchBar from '../SearchBar'
   import "./Companies.css"
+  import{v4 as uuid} from 'uuid'
 
 function Companies({companies, token, checkAuth, filtered, searchBar}){
-    let comp = filtered.current ? filtered.current : companies.companies
+    let comp = filtered
 if (checkAuth(token)){
     return(
         <>
         <SearchBar searchBar={searchBar}/>
         {comp.map(company => (
-          <section className="col-md-4 companies-center">
+          <section key={uuid()}className="col-md-4 companies-center">
               <Card>
                 <CardBody>
                     <Link to={`/companies/${company.handle}`}>

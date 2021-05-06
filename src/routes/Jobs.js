@@ -9,16 +9,16 @@ import {
   } from "reactstrap";
 import SearchBar from '../SearchBar'
 import "./Jobs.css"
+import{v4 as uuid} from 'uuid'
 
-function Jobs({jobs, token}){
-  console.log(token)
+function Jobs({jobs, token, checkAuth, searchBar}){
   let history = useHistory();
-  if (token === localStorage.getItem('token') && token != ""){
+  if (checkAuth(token)){
     return(
         <>
-        <SearchBar />
+        <SearchBar searchBar={searchBar}/>
         {jobs.jobs.map(job => (
-          <section className="col-md-4 jobs-center">
+          <section key={uuid()} className="col-md-4 jobs-center">
               <Card>
                 <CardBody>
                     <Link to={`/companies/${job.companyHandle}`}>

@@ -12,10 +12,11 @@ function SearchBar({searchBar}){
     function handleSubmit(e){
         e.preventDefault()
         searchBar(formData);
+        document.getElementById("search-bar").reset();
     }
     return(
        <section className="search-bar">
-           <form>
+           <form id="search-bar">
                     <input type="text" placeholder="Search" id="search" name="search" onChange={handleChange}/>
                 <button onClick={handleSubmit}>Search!</button>
            </form>

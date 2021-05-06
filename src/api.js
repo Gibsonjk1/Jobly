@@ -49,7 +49,9 @@ class JoblyApi {
   }
 
   static async getFilteredCompanies(search){
-    let res = await this.request('companies', `{"query": {"nameLike":"${search}"}}`)
+    let searchTerm = search? `?name=${search}` : "";
+    let res = await this.request(`companies${searchTerm}`)
+    return res
   }
 
   static async getJobsByCompany(handle){
@@ -57,8 +59,9 @@ class JoblyApi {
     return res.jobs
   }
 
-  static async getAllJobs() {
-    let res = await this.request('jobs/')
+  static async getAllJobs(search) {
+    let searchTerm = search? `?title=${search}` : "";
+    let res = await this.request(`jobs${searchTerm}`)
     return res;
   }
 
@@ -77,7 +80,10 @@ class JoblyApi {
     return res;
   }
 
-  static async getUser(username){}
+  static async getUser(username){
+    let res = await this.request(`users/${username}`, username)
+    return res
+  }
 
   // obviously, you'll add a lot here ...
 }

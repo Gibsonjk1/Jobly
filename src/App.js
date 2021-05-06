@@ -20,7 +20,7 @@ function App() {
   const [jobs, setJobs] = useState([]);
   const [token, setToken] = useState(['']);
   const [currUser, setCurrUser] = useState('');
-  const [search, setSearch] = useState(null)
+  const [search, setSearch] = useState("")
 
   const currentUser = useRef("");
   const currentToken = useRef("")
@@ -31,24 +31,21 @@ function App() {
     async function getInfo() {
       let companies = await JoblyApi.getAllCompanies();
       let jobs = await JoblyApi.getAllJobs();
-      console.log(currentToken.current)
       setCompanies(companies)
       setJobs(jobs);
       setToken(localStorage.getItem('token'));
-      setCurrUser(localStorage.getItem('user'));
+      setCurrUser(localStorage.getItem('username'));
       setIsLoading(false);
     }
     getInfo();
   }, []);
 
 useEffect(()=>{
- return history.push("/")
-}, [token])
-
-useEffect(()=>{
   async function getFiltered(){
   let filteredCompanies = await JoblyApi.getFilteredCompanies(search)
-  filteredComp.current = filteredCompanies || null;
+  let jobs = await JoblyApi.getAllJobs(search)
+  setJobs(jobs);
+  filteredComp.current = filteredCompanies.companies;
   };
   getFiltered();
 },[search])
@@ -60,14 +57,13 @@ useEffect(()=>{
 
   function user(formData, token){
     currentUser.current = formData.username;
+    console.log(currentUser.current)
     currentToken.current = token.token;
     setCurrUser(currentUser.current);
     setToken(token.token);
-    console.log("I made it to user function")
-    console.log(token)
     localStorage.setItem("token", currentToken.current)
-    localStorage.setItem("user", currentUser.current)
-    return null
+    localStorage.setItem("username", currentUser.current)
+    return history.push("/")
   }
 
   function checkAuth(token){
@@ -91,25 +87,25 @@ useEffect(()=>{
   
   return (
     <>
-    <Navbar token={token} checkAuth={checkAuth}/>
+    <Navbar currUser={currUser} token={token} checkAuth={checkAuth}/>
     
       <Switch>
           <Route exact path="/">
               <Home currUser={currUser} token={token} checkAuth={checkAuth}/>
           </Route>
           <Route exact path="/companies">
-              <Companies companies={companies} token={token} checkAuth={checkAuth} filtered={filteredComp} searchBar={searchBar}/>
+              <Companies companies={companies} token={token} checkAuth={checkAuth} filtered={filteredComp.current} searchBar={searchBar}/>
           </Route>
           <Route path="/companies/:handle" >
               <Company token={token}/>
           </Route>
           <Route exact path="/jobs">
-              <Jobs jobs={jobs} token={token}/>
+              <Jobs jobs={jobs} token={token} checkAuth={checkAuth} searchBar={searchBar}/>
           </Route>
           <Route exact path="/signup">
               <Signup user={user}/>
           </Route>
-          <Route exact path="/profile">
+          <Route exact path="/profile/:username">
               <Profile token={token} currUser={currUser} checkAuth={checkAuth}/>
           </Route>
           <Route exact path="/login">

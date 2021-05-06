@@ -3,7 +3,7 @@ import "./Navbar.css";
 import { NavLink } from "react-router-dom";
 import { Navbar, Nav, NavItem } from "reactstrap";
 
-function NavBar({token, checkAuth}) {
+function NavBar({currUser, token, checkAuth}) {
     if (checkAuth(token)){
         return(    
         <div>
@@ -20,7 +20,7 @@ function NavBar({token, checkAuth}) {
                 <NavLink to="/companies">Companies</NavLink>
               </NavItem>
               <NavItem className="navitem">
-                <NavLink to="/profile">Profile</NavLink>
+                <NavLink to={`/profile/${currUser}`}>Profile</NavLink>
               </NavItem>
                 <NavItem className="navitem">
                   <NavLink to="/logout">Logout</NavLink>

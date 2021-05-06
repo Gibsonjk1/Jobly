@@ -3,6 +3,7 @@ import "./Home.css"
 
 function Home({currUser, token, checkAuth}){
    let message = checkAuth(token)? currUser : "Stranger"
+   console.log(currUser)
     return(
         <div className="center">   
             <h1>
