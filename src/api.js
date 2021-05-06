@@ -48,6 +48,10 @@ class JoblyApi {
     return res;
   }
 
+  static async getFilteredCompanies(search){
+    let res = await this.request('companies', `{"query": {"nameLike":"${search}"}}`)
+  }
+
   static async getJobsByCompany(handle){
     let res = await this.request(`companies/${handle}`)
     return res.jobs

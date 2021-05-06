@@ -4,7 +4,6 @@ import { NavLink } from "react-router-dom";
 import { Navbar, Nav, NavItem } from "reactstrap";
 
 function NavBar({token, checkAuth}) {
-  console.log(token)
     if (checkAuth(token)){
         return(    
         <div>
@@ -28,7 +27,8 @@ function NavBar({token, checkAuth}) {
                 </NavItem>
               </Nav>
             </Navbar>
-          </div>)
+          </div>
+          )
     }
   return (
     <div>

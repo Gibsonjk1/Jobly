@@ -1,5 +1,5 @@
 import React from "react"
-import {Link, useHistory} from "react-router-dom"
+import {Link, Redirect} from "react-router-dom"
 import {
     Card,
     CardBody,
@@ -9,14 +9,13 @@ import {
   import SearchBar from '../SearchBar'
   import "./Companies.css"
 
-function Companies({companies, token}){
-    console.log(token)
-    let history = useHistory();
-if (token === localStorage.getItem('token') && token != ""){
+function Companies({companies, token, checkAuth, filtered, searchBar}){
+    let comp = filtered.current ? filtered.current : companies.companies
+if (checkAuth(token)){
     return(
         <>
-        <SearchBar />
-        {companies.companies.map(company => (
+        <SearchBar searchBar={searchBar}/>
+        {comp.map(company => (
           <section className="col-md-4 companies-center">
               <Card>
                 <CardBody>
@@ -35,7 +34,9 @@ if (token === localStorage.getItem('token') && token != ""){
     </>
     );
 }else{
-    return history.push('/')
+    return(
+        <Redirect to="/" />
+    )
 }
 }
 
