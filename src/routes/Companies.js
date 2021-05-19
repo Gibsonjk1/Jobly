@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useContext} from "react"
 import {Link, Redirect} from "react-router-dom"
 import {
     Card,
@@ -9,15 +9,17 @@ import {
   import SearchBar from '../SearchBar'
   import "./Companies.css"
   import{v4 as uuid} from 'uuid'
+  import AppContext from "../Context"
 
-function Companies({companies, token, checkAuth, filtered, searchBar}){
+function Companies({filtered, searchBar}){
     let comp = filtered
+    let {token, checkAuth} = useContext(AppContext)
 if (checkAuth(token)){
     return(
         <>
         <SearchBar searchBar={searchBar}/>
         {comp.map(company => (
-          <section key={uuid()}className="col-md-4 companies-center">
+          <section key={uuid()} className="col-md-4 companies-center">
               <Card>
                 <CardBody>
                     <Link to={`/companies/${company.handle}`}>

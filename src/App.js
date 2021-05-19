@@ -11,6 +11,7 @@ import Profile from './routes/Profile'
 import Navbar from './Navbar'
 import JoblyApi from './api'
 import Logout from "./routes/Logout"
+import AppContext from "./Context"
 
 
 
@@ -21,6 +22,7 @@ function App() {
   const [token, setToken] = useState(['']);
   const [currUser, setCurrUser] = useState('');
   const [search, setSearch] = useState("")
+  const [userInfo, setUserInfo] = useState(localStorage.getItem("username"))
 
   const currentUser = useRef("");
   const currentToken = useRef("")
@@ -31,6 +33,7 @@ function App() {
     async function getInfo() {
       let companies = await JoblyApi.getAllCompanies();
       let jobs = await JoblyApi.getAllJobs();
+      JoblyApi.token = localStorage.getItem('token')
       setCompanies(companies)
       setJobs(jobs);
       setToken(localStorage.getItem('token'));
@@ -50,6 +53,16 @@ useEffect(()=>{
   getFiltered();
 },[search])
 
+useEffect(()=>{
+  async function getUser(){
+    const username = localStorage.getItem("username")
+    JoblyApi.token = localStorage.getItem("token")
+    const profileData = await JoblyApi.getUser(username)
+   setUserInfo(profileData)
+    }
+    getUser()
+},[currUser])
+
 
   if (isLoading) {
     return <p>Loading &hellip;</p>;
@@ -59,11 +72,12 @@ useEffect(()=>{
     currentUser.current = formData.username;
     console.log(currentUser.current)
     currentToken.current = token.token;
-    setCurrUser(currentUser.current);
-    setToken(token.token);
     localStorage.setItem("token", currentToken.current)
     localStorage.setItem("username", currentUser.current)
-    return history.push("/")
+    JoblyApi.token = token.token;
+    setToken(token.token);
+    setCurrUser(currentUser.current);
+    history.push("/");
   }
 
   function checkAuth(token){
@@ -76,7 +90,7 @@ useEffect(()=>{
 
   function logout(){
     localStorage.clear();
-    setToken(null);
+    setToken("Not a Token");
     
     return <Redirect to="/" />
   }
@@ -86,37 +100,38 @@ useEffect(()=>{
   }
   
   return (
-    <>
-    <Navbar currUser={currUser} token={token} checkAuth={checkAuth}/>
+   <AppContext.Provider value={{ token, setToken, currUser, setCurrUser, checkAuth, user }}>
+   
+    <Navbar />
     
       <Switch>
           <Route exact path="/">
-              <Home currUser={currUser} token={token} checkAuth={checkAuth}/>
+              <Home />
           </Route>
           <Route exact path="/companies">
-              <Companies companies={companies} token={token} checkAuth={checkAuth} filtered={filteredComp.current} searchBar={searchBar}/>
+              <Companies filtered={filteredComp.current} searchBar={searchBar}/>
           </Route>
           <Route path="/companies/:handle" >
-              <Company token={token}/>
+              <Company />
           </Route>
           <Route exact path="/jobs">
-              <Jobs jobs={jobs} token={token} checkAuth={checkAuth} searchBar={searchBar}/>
+              <Jobs jobs={jobs} searchBar={searchBar}/>
           </Route>
           <Route exact path="/signup">
-              <Signup user={user}/>
+              <Signup />
           </Route>
-          <Route exact path="/profile/:username">
-              <Profile token={token} currUser={currUser} checkAuth={checkAuth}/>
+          <Route exact path="/profile">
+              <Profile userInfo={userInfo}/>
           </Route>
           <Route exact path="/login">
-              <Login user={user}/>
+              <Login />
           </Route>
           <Route exact path="/logout">
               <Logout logout={logout}/>
           </Route>
           <Redirect to="/"/>
       </Switch>
-    </>
+    </AppContext.Provider>
   );
 }
 

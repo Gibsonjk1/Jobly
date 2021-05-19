@@ -1,9 +1,10 @@
-import React from "react"
+import React, {useContext} from "react"
+import AppContext from "../Context"
 import "./Home.css"
 
-function Home({currUser, token, checkAuth}){
-   let message = checkAuth(token)? currUser : "Stranger"
-   console.log(currUser)
+function Home(){
+    let { currUser, token, checkAuth } = useContext(AppContext);
+    let message = checkAuth(token)? currUser : "Stranger"
     return(
         <div className="center">   
             <h1>

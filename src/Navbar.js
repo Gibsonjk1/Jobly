@@ -1,12 +1,15 @@
-import React from "react";
+import React, {useContext} from "react";
 import "./Navbar.css";
 import { NavLink } from "react-router-dom";
 import { Navbar, Nav, NavItem } from "reactstrap";
+import AppContext from "./Context"
+import {v4 as uuid} from "uuid"
 
-function NavBar({currUser, token, checkAuth}) {
+function NavBar() {
+    let {token, checkAuth} = useContext(AppContext);
     if (checkAuth(token)){
         return(    
-        <div>
+        <div key={uuid()}>
             <Navbar expand="md">
               <NavLink exact to="/" className="navbar-brand">
                 Jobly
@@ -20,7 +23,7 @@ function NavBar({currUser, token, checkAuth}) {
                 <NavLink to="/companies">Companies</NavLink>
               </NavItem>
               <NavItem className="navitem">
-                <NavLink to={`/profile/${currUser}`}>Profile</NavLink>
+                <NavLink to={`/profile`}>Profile</NavLink>
               </NavItem>
                 <NavItem className="navitem">
                   <NavLink to="/logout">Logout</NavLink>
@@ -31,7 +34,7 @@ function NavBar({currUser, token, checkAuth}) {
           )
     }
   return (
-    <div>
+    <div key={uuid()}>
       <Navbar expand="md">
         <NavLink exact to="/" className="navbar-brand">
           Jobly

@@ -30,7 +30,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start-fe": "react-scripts start",
-    "start-be": "node server/server.js"
+    "start-be": "node ../jobly-backend/server.js"
   },
   "eslintConfig": {
     "extends": [

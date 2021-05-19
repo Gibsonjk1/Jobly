@@ -1,24 +1,15 @@
 import React, {useState}from "react"
-import JoblyApi from "../api"
-import {useParams } from "react-router-dom";
-import { Card, CardBody, CardTitle, CardText } from "reactstrap";
+import { Card, CardBody, CardTitle} from "reactstrap";
+import "./Profile.css"
 
-function Profile(){
-    const [user, setUser] = useState(null)
+function Profile({userInfo}){
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
         email: "",
     })
-    const { username } = useParams();
-    console.log(username)
+   
     
-    async function getInfo(){
-    const profileData = await JoblyApi.getUser(username)
-    setUser(profileData)
-    }
-
-    getInfo()
 
     function handleChange(e){
         setFormData({...formData, 
@@ -27,24 +18,24 @@ function Profile(){
     function handleSubmit(e){
         e.preventDefault()
     }
+    console.log()
     return(
         <section className="col-md-4 profile-center">
               <Card>
                 <CardBody>
                   <CardTitle className="font-weight-bold text-center">
-                    {user.username}
+                    Hello {userInfo.user.username}
                   </CardTitle>
-                  <CardText>
                   <form>
-                <label htmlFor="firstName">First Name: </label>
-                    <input type="text" placeholder="First Name" id="firstname" name="firstName" onChange={handleChange}/> <br />
-                <label htmlFor="lastName">Last Name: </label>
-                    <input type="text" placeholder="Last Name" id="lastname" name="lastName" onChange={handleChange}/> <br />
-                <label htmlFor="email">Email: </label>
-                    <input type="email" placeholder="Email" id="email" name="email" onChange={handleChange}/> <br />
-                <button onClick={handleSubmit}>Submit!</button>
+                <label htmlFor="firstName">First Name: </label><br/>
+                    <input type="text" value={userInfo.user.firstName} id="firstname" name="firstName" onChange={handleChange}/> <br />
+                <label htmlFor="lastName">Last Name: </label> <br/>
+                    <input type="text" value={userInfo.user.lastName} id="lastname" name="lastName" onChange={handleChange}/><br />
+                <label htmlFor="email">Email: </label><br/>
+                    <input type="email" value={userInfo.user.email} id="email" name="email" onChange={handleChange}/> <br />
+                <button onClick={handleSubmit}>Submit to Change</button>
            </form>
-                  </CardText>
+
                 </CardBody>
               </Card>
             </section>

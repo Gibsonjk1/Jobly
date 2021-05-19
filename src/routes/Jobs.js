@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useContext} from "react"
 import {Link, useHistory} from "react-router-dom"
 import {
     Card,
@@ -10,9 +10,11 @@ import {
 import SearchBar from '../SearchBar'
 import "./Jobs.css"
 import{v4 as uuid} from 'uuid'
+import AppContext from "../Context";
 
-function Jobs({jobs, token, checkAuth, searchBar}){
+function Jobs({jobs, searchBar}){
   let history = useHistory();
+  let {token, checkAuth} = useContext(AppContext)
   if (checkAuth(token)){
     return(
         <>

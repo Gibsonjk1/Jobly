@@ -3,6 +3,7 @@ import {useParams } from "react-router-dom";
 import { Card, CardBody, CardTitle, CardText, CardSubtitle } from "reactstrap";
 import JoblyApi from '../api'
 import "./IndividualCompany.css"
+import{v4 as uuid} from 'uuid'
 
 function Company() {
 
@@ -29,7 +30,7 @@ if (isLoading) {
       <h5> {company.description}</h5>
       <hr />
         {company.jobs.map(job => (
-          <section className="col-md-4 company-center">
+          <section key={uuid()}className="col-md-4 company-center">
               <Card>
                 <CardBody>
                   <CardTitle className="font-weight-bold text-center">
